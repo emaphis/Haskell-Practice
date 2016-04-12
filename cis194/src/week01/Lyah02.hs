@@ -1,7 +1,7 @@
 -- | LYAH Chapter 2 - Starting Out
 -- <http://learnyouahaskell.com/starting-out>
 
-module Lyah02 where
+module Week01.Lyah02 where
 
 doubleMe :: Num a => a -> a
 doubleMe x = x + x
