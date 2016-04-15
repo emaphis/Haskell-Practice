@@ -12,6 +12,7 @@ import Test.QuickCheck  -- for Queckcheck example
 
 import Fib
 
+-- small non-negative integers
 newtype Small' = Small' Int
               deriving Show
 
@@ -23,14 +24,15 @@ main = hspec spec
 
 spec :: Spec
 spec = do
-  it "calculates arbitrary Fibonacci numbers" $ do
-    property $ \(Small n) ->
-      fib n == fib (n + 2) - fib (n + 1)
+  describe "fib" $ do
+    it "calculates arbitrary Fibonacci numbers" $ do
+      property $ \(Small' n) ->
+        fib n == fib (n + 2) - fib (n + 1)
 
-  it "is efficient" $ do
-    timeout 10000 (evaluate $ fib 32)
-      `shouldReturn` Just 2178309
+    it "is efficient" $ do
+      timeout 10000 (evaluate $ fib 32)
+        `shouldReturn` Just 2178309
       
-  it "returns 0 on negative input" $ do
-    property $ \n -> n < 0 ==>
-       fib n == 0
+    it "returns 0 on negative input" $ do
+      property $ \n -> n < 0 ==>
+        fib n == 0

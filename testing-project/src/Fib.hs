@@ -1,6 +1,6 @@
 -- file Fib.hs
 
-module Fib (fib) where
+module Fib (fib,fibs) where
 
 -- | Calulate Fibonacci numbers
 --

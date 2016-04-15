@@ -19,4 +19,3 @@ spec =
 
     it "returns zero when given zero" $
       absolute 0 `shouldBe` 0
-
