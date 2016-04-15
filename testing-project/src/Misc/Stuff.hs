@@ -10,4 +10,5 @@ fact n = n * fact (n-1)
 
 -- | Calculates the length of a list
 len :: [a] -> Int
-len = undefined
+len [] = 0
+len (_:xs) = 1 + len xs
