@@ -44,4 +44,4 @@ test-suite testing-project-test
 
 source-repository head
   type:     git
-  location: https://github.com/githubuser/testing-project
+  location: https://github.com/emaphis/Haskell-Practice/testing-project

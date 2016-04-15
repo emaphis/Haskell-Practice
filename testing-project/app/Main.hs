@@ -1,6 +1,8 @@
 module Main where
 
-import Lib
+import Lib (ourAdd)
+
+import Text.Printf (printf)
 
 main :: IO ()
-main = someFunc
+main = printf "2 + 3 = %d\n" (ourAdd 2 3)
