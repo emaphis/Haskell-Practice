@@ -2,7 +2,7 @@
 
 module FibSpec (main, spec) where
 
-import Control.Applicative
+-- import Control.Applicative
 import Control.Exception
 import System.Timeout
 

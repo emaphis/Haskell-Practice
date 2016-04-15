@@ -1,12 +1,15 @@
--- | Math library testing.
+-- | Math unit tests
 
 module MathSpec where
 
 import Test.Hspec
-import Math
+import Math (absolute)
 
 main :: IO ()
-main = hspec $ do
+main = hspec spec
+
+spec :: Spec
+spec =
   describe "absolute" $ do
     it "returns the original number when given a positive input" $
       absolute 1 `shouldBe` 1
