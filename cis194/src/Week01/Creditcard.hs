@@ -2,12 +2,10 @@
 
 module Week01.Creditcard where
 
--- Create to digits
+-- Create toDigits
 
 toDigits :: Integer -> [Integer]
-toDigits n
-  | n <= 0    = []
-  | otherwise = toDigits (n `div` 10) ++ [n `mod` 10]
+toDigits n = reverse (toDigitsRev n)
 
 toDigitsRev :: Integer -> [Integer]
 toDigitsRev n
@@ -25,12 +23,19 @@ testToDigits =
 
 --
 doubleEveryOther :: [Integer] -> [Integer]
-doubleEveryOther []       = []
-doubleEveryOther [x]      = [x]
-doubleEveryOther [x,y]    = [(2*x), y]
-doubleEveryOther (x:y:zs) = x : (2*y) : doubleEveryOther zs
+doubleEveryOther xs = reverse (doubleEveryOther' (reverse xs))
+  where
+    doubleEveryOther' []       = []
+    doubleEveryOther' [x]      = [x]
+    doubleEveryOther' [x,y]    = [2*x, y]
+    doubleEveryOther' (x:y:zs) = x : (2*y) : doubleEveryOther zs
 
-testDoubleEveryOther :: Bool
-testDoubleEveryOther =
-  doubleEveryOther [] == []  &&
-  doubleEveryOther [1] == [1]
+
+sumDigits :: [Integer] -> Integer
+sumDigits []     = 0
+sumDigits (x:xs) = if (x `div` 10) > 0
+                   then 1 + (x `mod` 10) + sumDigits xs
+                   else x + sumDigits xs
+
+validate :: Integer -> Bool
+validate n = sumDigits (doubleEveryOther (toDigits n)) `mod` 10  == 0
