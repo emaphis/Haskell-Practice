@@ -19,6 +19,7 @@ library
   exposed-modules:     Lib
                      , Week01.Lyah02
                      , Week01.Creditcard
+                     , Week01.Hanoi
   build-depends:       QuickCheck >= 2.8.1
                      , base >= 4.7 && < 5
                      , hspec >= 2.2.3
