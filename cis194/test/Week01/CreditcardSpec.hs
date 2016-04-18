@@ -52,5 +52,7 @@ spec =
         sumDigits [16,7,12,5] `shouldBe` 22
 
     describe "validate" $ do
-      it "returns False when given 0" $
-        validate 0 `shouldBe` False
+      it "homework example 1" $
+        validate 4012888888881881 `shouldBe` True
+      it "homework example 2" $
+        validate 4012888888881882 `shouldBe` False
