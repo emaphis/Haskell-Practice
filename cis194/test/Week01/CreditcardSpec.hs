@@ -14,12 +14,12 @@ spec :: Spec
 spec =
   describe "Credit Card Tests" $ do
     describe "testing toDigits" $ do
-      it "toDigits 0 == []" $
+      it "toDigits 0 => []" $
         toDigits 0 `shouldBe` []
-
-      it "toDigits 1 == [1]" $
+      it "toDigits (-17) => []" $
+        toDigits (-17) `shouldBe` []
+      it "toDigits 1 => [1]" $
         toDigits 1 `shouldBe` [1]
-
       it "toDigits 1234" $
          toDigits 1234 `shouldBe` [1,2,3,4]
 
@@ -52,7 +52,7 @@ spec =
         sumDigits [16,7,12,5] `shouldBe` 22
 
     describe "validate" $ do
-      it "homework example 1" $
+      it "homework example 1 should be True" $
         validate 4012888888881881 `shouldBe` True
-      it "homework example 2" $
+      it "homework example 2 should be False" $
         validate 4012888888881882 `shouldBe` False

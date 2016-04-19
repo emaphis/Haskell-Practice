@@ -9,8 +9,7 @@ toDigits n = reverse (toDigitsRev n)
 
 toDigitsRev :: Integer -> [Integer]
 toDigitsRev n
-  | n < 0     = error "Number must be positive"
-  | n == 0    = []
+  | n <= 0    = []
   | otherwise = n `mod` 10 :  toDigitsRev (n `div` 10)
 
 testToDigits :: Bool
@@ -21,11 +20,16 @@ testToDigits =
   toDigitsRev 1234 == [4,3,2,1]
 
 
---
+-- uses double recursion
 doubleEveryOther :: [Integer] -> [Integer]
-doubleEveryOther []       = []
-doubleEveryOther [x]      = [x]
-doubleEveryOther (x:y:zs) = x : (2*y) : doubleEveryOther zs
+doubleEveryOther [] = []
+doubleEveryOther (n:ns) =
+  if odd (length (n:ns))
+     then n : doubleEveryOther' ns
+     else doubleEveryOther' (n:ns)
+  where
+    doubleEveryOther' []     = []
+    doubleEveryOther' (x:xs) =  (2*x) : doubleEveryOther xs
 
 
 sumDigits :: [Integer] -> Integer
@@ -35,7 +39,7 @@ sumDigits (x:xs) = if (x `div` 10) > 0
                    else x + sumDigits xs
 
 validate :: Integer -> Bool
-validate n = sumDigits (doubleEveryOther (toDigitsRev n)) `mod` 10  == 0
+validate n = sumDigits (doubleEveryOther (toDigits n)) `mod` 10  == 0
 
 something :: Integer -> Integer
 something n = sumDigits (doubleEveryOther (toDigitsRev n))
