@@ -1,4 +1,5 @@
 -- | Bookstore Example
+--   example from Realworld Haskell Chapter 03
 
 module Week02.BookStore where
 
@@ -31,7 +32,28 @@ data BillingInfo = CreditCard CardNumber CardHolder Address
                  | Invoice CustomerID
   deriving (Show)
 
+bookID :: BookInfo -> Integer
+bookID      (Book bid _ _)  = bid
 
-sumInt :: Integer -> Integer
-sumInt 1 = 1
-sumInt n = n + sumInt (n-1)
+bookTitle :: BookInfo -> String
+bookTitle   (Book _ title _)  = title
+
+bookAuthors :: BookInfo -> [String]
+bookAuthors (Book _ _ authors)  = authors
+
+
+data Customer = Customer {
+    customerID      :: CustomerID
+  , customerName    :: String
+  , customerAddress :: Address
+  } deriving (Show)
+
+
+customer2 :: Customer
+customer2 = Customer {
+              customerID = 271828
+            , customerAddress = ["1048576 Disk Drive",
+                                 "Milpitas, CA 95134",
+                                 "USA"]
+            , customerName = "Jane Q. Citizen"
+            }

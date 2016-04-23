@@ -1,4 +1,5 @@
 -- | Type systems help reduce bugs
+--   example from Realworld Haskell Chapter 03
 
 module Week02.AlgerbraicVector where
 

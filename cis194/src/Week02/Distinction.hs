@@ -1,4 +1,5 @@
 -- | Distinguishing between structurally same types 
+--   example from Realworld Haskell Chapter 03
 
 module Week01.Distinction where
 
