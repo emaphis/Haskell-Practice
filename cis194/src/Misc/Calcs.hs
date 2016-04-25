@@ -5,19 +5,7 @@ module Misc.Calcs where
 import Data.List.Split (splitOn)
 import qualified Data.Map as M
 import Data.Char
-import Control.Monad
-
-getWords :: String -> [String]
-getWords txt = splitOn " " txt
-
-
-findLengths :: String -> [(String, Int)]
-findLengths txt = lengths (getWords txt)
-
-
-
-lengths :: [String] -> [(String, Int)]
-lengths xs = map (\x -> (x, length x)) xs
+-- import Control.Monad
 
 -- Simple English
 
@@ -54,12 +42,30 @@ map1 = M.fromList
    ('Z', 26)]
 
 
-lft :: Maybe [Integer]
-lft = (mapM (\x -> M.lookup x map1) (map toUpper "string") )
+-- divide text into a list of words
+getWords :: String -> [String]
+getWords txt = splitOn " " txt
 
-lst :: String -> Maybe [Integer]
-lst str = do
-  (mapM (\x -> M.lookup x map1) str)
+
+-- test code - produce a list of pairs given a text
+findLengths :: String -> [(String, Int)]
+findLengths txt = lengths (getWords txt)
+
+
+-- test code - given a list of strings produce a list of pairs of strings and lengths of the strings
+lengths :: [String] -> [(String, Int)]
+lengths xs = map (\x -> (x, length x)) xs
+
+calc :: [String] -> [(String, Integer)]
+calc xs = map (\s -> (s, sumM (calcSE s))) xs
+
+-- calc simple English
+calcSE :: String -> Maybe [Integer]
+calcSE str = do
+  (mapM (\x -> M.lookup x map1) (map toUpper str))
+
+-- > calcSE "balloon"
+--   Just [2,1,12,12,15,15,14]
 
 -- sum a Maybe list of Integers
 sumM :: Maybe [Integer] -> Integer
@@ -68,8 +74,11 @@ sumM val =
     Nothing -> 0
     Just [] -> 0
     Just (x:xs) -> x + sumM (Just xs)
-    
-  
 
-al :: [(Integer, [Char])]
-al = [(1, "one"), (2, "two"), (3, "three"), (4, "four")]
+-- > sumM (Just [1,2,3,4])
+--   10
+
+ -- produce a list of pairs given a text
+--findLengths :: String -> [(String, Int)]
+--findLengths txt = lengths (getWords txt)
+
