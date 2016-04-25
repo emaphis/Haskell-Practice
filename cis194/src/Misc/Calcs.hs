@@ -13,7 +13,7 @@ map1 :: M.Map Char Integer
 map1 = M.fromList
 
 --map1 :: [(Char, Integer)]
---map1 = 
+--map1 =
   [('A', 1),
    ('B', 2),
    ('C', 3),
@@ -52,23 +52,22 @@ getWords txt = splitOn " " txt
 
 -- calc simple English
 calcSE :: String -> Maybe [Integer]
-calcSE str = do
-  (mapM (\x -> M.lookup x map1) (map toUpper str))
+calcSE str = (mapM (\x -> M.lookup x map1) (map toUpper str))
 
 -- > calcSE "balloon"
 --   Just [2,1,12,12,15,15,14]
 
 
-calc :: [String] -> [(String, Integer)]
-calc xs = map (\s -> (s, sumM (calcSE s))) xs
+calcGem :: [String] -> [(String, Integer)]
+calcGem xs = map (\s -> (s, sumM (calcSE s))) xs
 
--- > calc ["lets","go","on","a", "balloon", "ride"]
+-- > calcGem ["lets","go","on","a", "balloon", "ride"]
 --   [("lets",56),("go",22),("on",29),("a",1),("balloon",71),("ride",36)]
 
 
 -- given some text find the SE gematria
 findGematria :: String -> [(String, Integer)]
-findGematria txt = calc (getWords txt)
+findGematria txt = calcGem (getWords txt)
 
 -- > findGematria "lets go on a balloon ride"
 --   [("lets",56),("go",22),("on",29),("a",1),("balloon",71),("ride",36)]
@@ -83,3 +82,17 @@ sumM val =
     Just (x:xs) -> x + sumM (Just xs)
 
 
+-- filtring example
+fex :: [(String, Integer)]
+fex = [("lets",56),("go",22),("on",29),("a",1),("balloon",71),("ride",36)]
+
+-- > filter (\p -> even (snd p)) fex
+--   [("lets",56),("go",22),("ride",36)]
+
+filterList :: (Integer -> Bool) -> [(String, Integer)] -> [(String, Integer)]
+filterList prd lst = filter (\p -> prd (snd p)) lst
+
+
+-- test for prime numbers
+isPrime :: Integral a => a -> Bool
+isPrime x = null (filter (\y ->  x `mod`y == 0) (takeWhile (\y ->  y*y <= x) [2..]))
