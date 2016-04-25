@@ -46,18 +46,9 @@ map1 = M.fromList
 getWords :: String -> [String]
 getWords txt = splitOn " " txt
 
+-- getWords "lets go on a balloon ride"
+-- ["lets","go","on","a","balloon","ride"
 
--- test code - produce a list of pairs given a text
-findLengths :: String -> [(String, Int)]
-findLengths txt = lengths (getWords txt)
-
-
--- test code - given a list of strings produce a list of pairs of strings and lengths of the strings
-lengths :: [String] -> [(String, Int)]
-lengths xs = map (\x -> (x, length x)) xs
-
-calc :: [String] -> [(String, Integer)]
-calc xs = map (\s -> (s, sumM (calcSE s))) xs
 
 -- calc simple English
 calcSE :: String -> Maybe [Integer]
@@ -67,6 +58,22 @@ calcSE str = do
 -- > calcSE "balloon"
 --   Just [2,1,12,12,15,15,14]
 
+
+calc :: [String] -> [(String, Integer)]
+calc xs = map (\s -> (s, sumM (calcSE s))) xs
+
+-- > calc ["lets","go","on","a", "balloon", "ride"]
+--   [("lets",56),("go",22),("on",29),("a",1),("balloon",71),("ride",36)]
+
+
+-- given some text find the SE gematria
+findGematria :: String -> [(String, Integer)]
+findGematria txt = calc (getWords txt)
+
+-- > findGematria "lets go on a balloon ride"
+--   [("lets",56),("go",22),("on",29),("a",1),("balloon",71),("ride",36)]
+
+
 -- sum a Maybe list of Integers
 sumM :: Maybe [Integer] -> Integer
 sumM val =
@@ -75,10 +82,4 @@ sumM val =
     Just [] -> 0
     Just (x:xs) -> x + sumM (Just xs)
 
--- > sumM (Just [1,2,3,4])
---   10
-
- -- produce a list of pairs given a text
---findLengths :: String -> [(String, Int)]
---findLengths txt = lengths (getWords txt)
 
