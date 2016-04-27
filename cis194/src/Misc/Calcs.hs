@@ -137,10 +137,13 @@ getWords txt = splitOn " " txt
 -- getWords "lets go on a balloon ride"
 -- ["lets","go","on","a","balloon","ride"
 
+-- calc gematria given a word and a table
+calc :: M.Map Char Integer -> String  -> Maybe [Integer]
+calc gMap str = (mapM (\c -> M.lookup c gMap) (map toUpper str))
 
 -- calc simple English
 calcSE :: String -> Maybe [Integer]
-calcSE str = (mapM (\x -> M.lookup x map1) (map toUpper str))
+calcSE str = calc seMap str
 
 -- > calcSE "balloon"
 --   Just [2,1,12,12,15,15,14]
@@ -177,6 +180,8 @@ fex = [("lets",56),("go",22),("on",29),("a",1),("balloon",71),("ride",36)]
 -- > filter (\p -> even (snd p)) fex
 --   [("lets",56),("go",22),("ride",36)]
 
+
+-- filter a list of pairs based on the second Iteger component.
 filterList :: (Integer -> Bool) -> [(String, Integer)] -> [(String, Integer)]
 filterList prd lst = filter (\p -> prd (snd p)) lst
 
