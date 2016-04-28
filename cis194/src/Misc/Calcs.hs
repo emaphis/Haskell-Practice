@@ -10,7 +10,9 @@ import Data.Char
 -- Simple English
 seMap :: M.Map Char Integer
 seMap = M.fromList
-  [('A', 1),
+  [(' ', 0),
+   ('-', 0),
+   ('A', 1),
    ('B', 2),
    ('C', 3),
    ('D', 4),
@@ -40,7 +42,9 @@ seMap = M.fromList
 -- English
 enMap :: M.Map Char Integer
 enMap = M.fromList
-  [('A', 6),
+  [(' ', 0),
+   ('-', 0),
+   ('A', 6),
    ('B', 12),
    ('C', 18),
    ('D', 24),
@@ -70,7 +74,9 @@ enMap = M.fromList
 -- Pythagorian
 pyMap :: M.Map Char Integer
 pyMap = M.fromList
-  [('A', 1),
+  [(' ', 0),
+   ('-', 0),
+   ('A', 1),
    ('B', 2),
    ('C', 3),
    ('D', 4),
@@ -101,7 +107,9 @@ pyMap = M.fromList
 -- Hebrew
 heMap :: M.Map Char Integer
 heMap = M.fromList
-  [('A', 1),
+  [(' ', 0),
+   ('-', 0),
+   ('A', 1),
    ('B', 2),
    ('C', 3),
    ('D', 4),
@@ -141,23 +149,36 @@ getWords txt = splitOn " " txt
 calc :: M.Map Char Integer -> String  -> Maybe [Integer]
 calc gMap str = (mapM (\c -> M.lookup c gMap) (map toUpper str))
 
--- calc simple English
-calcSE :: String -> Maybe [Integer]
+-- seMap, enMap, pyMap, heMap
+
+-- calc Simple English, Pythagorian, Jewish
+calcSE,calcPY,calcHE :: String -> Maybe [Integer]
 calcSE str = calc seMap str
+calcPY str = calc pyMap str
+calcHE str = calc heMap str
 
 -- > calcSE "balloon"
 --   Just [2,1,12,12,15,15,14]
+-- > calcPY "balloon"
+--   Just [2,1,3,3,6,6,5]
+-- > calcHE "balloon"
+--   Just [2,1,20,20,50,50,40]
 
+-- calc the sum of Simple English, Pythagorian, Jewish
+sumSE,sumPY,sumHE  :: String -> Integer
+sumSE str = sumM (calcSE str)
+sumPY str = sumM (calcPY str)
+sumHE str = sumM (calcHE str)
 
-calcGem :: [String] -> [(String, Integer)]
-calcGem xs = map (\s -> (s, sumM (calcSE s))) xs
+calcGem :: [String] -> [(String, Integer, Integer, Integer)]
+calcGem xs = map (\s -> (s, sumSE s, sumPY s, sumHE s)) xs
 
 -- > calcGem ["lets","go","on","a", "balloon", "ride"]
 --   [("lets",56),("go",22),("on",29),("a",1),("balloon",71),("ride",36)]
 
 
 -- given some text find the SE gematria
-findGematria :: String -> [(String, Integer)]
+findGematria :: String -> [(String, Integer, Integer, Integer)]
 findGematria txt = calcGem (getWords txt)
 
 -- > findGematria "lets go on a balloon ride"
