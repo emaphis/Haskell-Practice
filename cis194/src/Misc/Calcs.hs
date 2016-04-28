@@ -5,7 +5,6 @@ module Misc.Calcs where
 import Data.List.Split (splitOn)
 import qualified Data.Map as M
 import Data.Char
--- import Control.Monad
 
 -- Simple English
 seMap :: M.Map Char Integer
@@ -13,6 +12,8 @@ seMap = M.fromList
   [(' ', 0),
    ('-', 0),
    ('.', 0),
+   ('!', 0),
+   ('?', 0),
    ('A', 1),
    ('B', 2),
    ('C', 3),
@@ -46,6 +47,8 @@ enMap = M.fromList
   [(' ', 0),
    ('-', 0),
    ('.', 0),
+   ('!', 0),
+   ('?', 0),
    ('A', 6),
    ('B', 12),
    ('C', 18),
@@ -73,12 +76,14 @@ enMap = M.fromList
    ('Y', 150),
    ('Z', 156)]
 
--- Pythagorian
+-- Pythagorean
 pyMap :: M.Map Char Integer
 pyMap = M.fromList
   [(' ', 0),
    ('-', 0),
    ('.', 0),
+   ('!', 0),
+   ('?', 0),
    ('A', 1),
    ('B', 2),
    ('C', 3),
@@ -106,6 +111,40 @@ pyMap = M.fromList
    ('Y', 7),  -- 2+5
    ('Z', 8)]  -- 2+6
 
+-- Pythagorean Exceptions
+pxMap :: M.Map Char Integer
+pxMap = M.fromList
+  [(' ', 0),
+   ('-', 0),
+   ('.', 0),
+   ('!', 0),
+   ('?', 0),
+   ('A', 1),
+   ('B', 2),
+   ('C', 3),
+   ('D', 4),
+   ('E', 5),
+   ('F', 6),
+   ('G', 7),
+   ('H', 8),
+   ('I', 9),
+   ('J', 1),  -- 1+0
+   ('K', 11), -- 2/11 - 1+1 = 2
+   ('L', 3),  -- 1+2
+   ('M', 4),  -- 1+3
+   ('N', 5),
+   ('O', 6),
+   ('P', 7),
+   ('Q', 8),
+   ('R', 9),  -- 1+8 = 9
+   ('S', 10), -- 1/10 - 1+9 = 10 = 1+0 = 1
+   ('T', 2),  -- 2+0
+   ('U', 3),  -- 2+1
+   ('V', 22), -- 4/22 - 2+2 = 4
+   ('W', 5),  -- 2+3
+   ('X', 6),  -- 2+4
+   ('Y', 7),  -- 2+5
+   ('Z', 8)]  -- 2+6
 
 -- Hebrew
 heMap :: M.Map Char Integer
@@ -153,13 +192,13 @@ getWords txt = splitOn " " txt
 calc :: M.Map Char Integer -> String  -> Maybe [Integer]
 calc gMap str = (mapM (\c -> M.lookup c gMap) (map toUpper str))
 
--- seMap, enMap, pyMap, heMap
 
--- calc Simple English, Pythagorian, Jewish
-calcSE,calcPY,calcHE :: String -> Maybe [Integer]
+-- calc Simple English, Pythagorean, Jewish, Pythagorean Exceptions
+calcSE,calcPY,calcHE,calcPX :: String -> Maybe [Integer]
 calcSE str = calc seMap str
 calcPY str = calc pyMap str
 calcHE str = calc heMap str
+calcPX str = calc pxMap str
 
 -- > calcSE "balloon"
 --   Just [2,1,12,12,15,15,14]
@@ -168,11 +207,12 @@ calcHE str = calc heMap str
 -- > calcHE "balloon"
 --   Just [2,1,20,20,50,50,40]
 
--- calc the sum of Simple English, Pythagorian, Jewish
-sumSE,sumPY,sumHE  :: String -> Integer
+-- calc the sum of Simple English, Pythagorean, Jewish
+sumSE,sumPY,sumHE,sumPX  :: String -> Integer
 sumSE str = sumM (calcSE str)
 sumPY str = sumM (calcPY str)
 sumHE str = sumM (calcHE str)
+sumPX str = sumM (calcPX str)
 
 -- calculate the geometria of a list of words
 calcGem :: [String] -> [(String, Integer, Integer, Integer)]
@@ -181,6 +221,10 @@ calcGem xs = map (\s -> (s, sumSE s, sumPY s, sumHE s)) xs
 -- > calcGem ["lets","go","on","a", "balloon", "ride"]
 -- [("lets",56,11,215),("go",22,13,57),("on",29,11,90),("a",1,1,1),("balloon",71,26,183),("ride",36,27,98)]
 
+-- calculate the Pythagorean of a list of words
+calcPythagorean :: [String] -> [(String, Integer, Integer)]
+calcPythagorean xs = map (\s -> (s, sumPY s, sumPX s)) xs
+
 
 -- given some text find the SE gematria
 findGematria :: String -> [(String, Integer, Integer, Integer)]
@@ -188,6 +232,11 @@ findGematria txt = calcGem (getWords txt)
 
 -- > findGematria "lets go on a balloon ride"
 --   [("lets",56,11,215),("go",22,13,57),("on",29,11,90),("a",1,1,1),("balloon",71,26,183),("ride",36,27,98)]
+
+-- given some text find the Pythogorean gematria
+findPythagorean :: String -> [(String, Integer, Integer)]
+findPythagorean txt = calcPythagorean (getWords txt)
+
 
 -- Nicely fomated report
 printGematria ::  String -> IO ()
