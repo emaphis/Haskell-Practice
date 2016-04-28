@@ -12,6 +12,7 @@ seMap :: M.Map Char Integer
 seMap = M.fromList
   [(' ', 0),
    ('-', 0),
+   ('.', 0),
    ('A', 1),
    ('B', 2),
    ('C', 3),
@@ -44,6 +45,7 @@ enMap :: M.Map Char Integer
 enMap = M.fromList
   [(' ', 0),
    ('-', 0),
+   ('.', 0),
    ('A', 6),
    ('B', 12),
    ('C', 18),
@@ -76,6 +78,7 @@ pyMap :: M.Map Char Integer
 pyMap = M.fromList
   [(' ', 0),
    ('-', 0),
+   ('.', 0),
    ('A', 1),
    ('B', 2),
    ('C', 3),
@@ -109,6 +112,7 @@ heMap :: M.Map Char Integer
 heMap = M.fromList
   [(' ', 0),
    ('-', 0),
+   ('.', 0),
    ('A', 1),
    ('B', 2),
    ('C', 3),
@@ -143,7 +147,7 @@ getWords :: String -> [String]
 getWords txt = splitOn " " txt
 
 -- getWords "lets go on a balloon ride"
--- ["lets","go","on","a","balloon","ride"
+-- ["lets","go","on","a","balloon","ride"]
 
 -- calc gematria given a word and a table
 calc :: M.Map Char Integer -> String  -> Maybe [Integer]
@@ -170,11 +174,12 @@ sumSE str = sumM (calcSE str)
 sumPY str = sumM (calcPY str)
 sumHE str = sumM (calcHE str)
 
+-- calculate the geometria of a list of words
 calcGem :: [String] -> [(String, Integer, Integer, Integer)]
 calcGem xs = map (\s -> (s, sumSE s, sumPY s, sumHE s)) xs
 
 -- > calcGem ["lets","go","on","a", "balloon", "ride"]
---   [("lets",56),("go",22),("on",29),("a",1),("balloon",71),("ride",36)]
+-- [("lets",56,11,215),("go",22,13,57),("on",29,11,90),("a",1,1,1),("balloon",71,26,183),("ride",36,27,98)]
 
 
 -- given some text find the SE gematria
@@ -182,8 +187,18 @@ findGematria :: String -> [(String, Integer, Integer, Integer)]
 findGematria txt = calcGem (getWords txt)
 
 -- > findGematria "lets go on a balloon ride"
---   [("lets",56),("go",22),("on",29),("a",1),("balloon",71),("ride",36)]
+--   [("lets",56,11,215),("go",22,13,57),("on",29,11,90),("a",1,1,1),("balloon",71,26,183),("ride",36,27,98)]
 
+--
+printGematria ::  (String, Integer, Integer, Integer) -> IO ()
+printGematria sx = do
+  mapM_ printEach sx
+--    where printEach (wrd,se,py,he) =
+--            putStrLn (wrd ++ " = " ++ show se ++ "/" ++  show py ++ "/" ++ show he)
+
+printEach :: (String, Integer, Integer, Integer) -> IO ()
+printEach (wrd,se,py,he) = do
+  putStrLn (wrd ++ " = " ++ show se ++ "/" ++  show py ++ "/" ++ show he)
 
 -- sum a Maybe list of Integers
 sumM :: Maybe [Integer] -> Integer
