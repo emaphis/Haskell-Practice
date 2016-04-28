@@ -189,16 +189,23 @@ findGematria txt = calcGem (getWords txt)
 -- > findGematria "lets go on a balloon ride"
 --   [("lets",56,11,215),("go",22,13,57),("on",29,11,90),("a",1,1,1),("balloon",71,26,183),("ride",36,27,98)]
 
---
-printGematria ::  (String, Integer, Integer, Integer) -> IO ()
-printGematria sx = do
-  mapM_ printEach sx
---    where printEach (wrd,se,py,he) =
---            putStrLn (wrd ++ " = " ++ show se ++ "/" ++  show py ++ "/" ++ show he)
+-- Nicely fomated report
+printGematria ::  String -> IO ()
+printGematria txt = do
+  printGemLines txt
+  printGemTotal txt
+
+printGemLines :: String -> IO ()
+printGemLines txt = mapM_ printEach (findGematria txt)
+
+printGemTotal :: String -> IO ()
+printGemTotal txt = printEach (txt, sumSE txt, sumPY txt, sumHE txt)
+
 
 printEach :: (String, Integer, Integer, Integer) -> IO ()
-printEach (wrd,se,py,he) = do
-  putStrLn (wrd ++ " = " ++ show se ++ "/" ++  show py ++ "/" ++ show he)
+printEach (wrd,se,py,he) =
+  putStrLn (wrd ++ " => " ++ show se ++ "/" ++  show py ++ "/" ++ show he)
+
 
 -- sum a Maybe list of Integers
 sumM :: Maybe [Integer] -> Integer
