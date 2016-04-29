@@ -352,23 +352,31 @@ findBacon txt = calcBacon (getWords txt)
 
 
 -- Nicely fomated report
-printGematria ::  String -> IO ()
-printGematria txt = do
+printGemTotal ::  String -> IO ()
+printGemTotal txt = do
   printGemLines txt
-  printGemTotal txt
+  printGem txt
 
 printGemLines :: String -> IO ()
 printGemLines txt = mapM_ printEach (findGematria txt)
 
-printGemTotal :: String -> IO ()
-printGemTotal txt = printEach (txt, sumSE txt, sumPY txt, sumHE txt)
+printGem :: String -> IO ()
+printGem txt = printEach (txt, sumSE txt, sumPY txt, sumHE txt)
 
-printPythagorian :: String -> IO ()
-printPythagorian txt = printEach (txt, sumPY txt, sumPS txt, sumPX txt)
+printPy :: String -> IO ()
+printPy txt = printEach (txt, sumPY txt, sumPS txt, sumPX txt)
+
+printPyLines :: String -> IO ()
+printPyLines txt = mapM_ printEach (findPythagorean txt)
+
+printPyTotal :: String -> IO ()
+printPyTotal txt = do
+  printPyLines txt
+  printPy txt
 
 printEach :: (String, Integer, Integer, Integer) -> IO ()
 printEach (wrd,se,py,he) =
-  putStrLn (wrd ++ " => " ++ show se ++ "/" ++  show py ++ "/" ++ show he)
+  putStrLn (wrd ++ " ---  " ++ show se ++ " / " ++  show py ++ " / " ++ show he)
 
 
 -- sum a Maybe list of Integers
