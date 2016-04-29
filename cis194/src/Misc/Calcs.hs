@@ -179,6 +179,68 @@ heMap = M.fromList
    ('Y', 400),
    ('Z', 500)]
 
+-- Bacon Gematria
+-- a-z = 1-26
+-- A-Z = 27-52
+bcMap :: M.Map Char Integer
+bcMap = M.fromList
+  [(' ', 0),
+   ('-', 0),
+   ('.', 0),
+   ('!', 0),
+   ('?', 0),
+   ('a', 1),
+   ('b', 2),
+   ('c', 3),
+   ('d', 4),
+   ('e', 5),
+   ('f', 6),
+   ('g', 7),
+   ('h', 8),
+   ('i', 9),
+   ('j', 10),
+   ('k', 11),
+   ('l', 12),
+   ('m', 13),
+   ('n', 14),
+   ('o', 15),
+   ('p', 16),
+   ('q', 17),
+   ('r', 18),
+   ('s', 19),
+   ('t', 20),
+   ('u', 21),
+   ('v', 22),
+   ('w', 23),
+   ('x', 24),
+   ('y', 25),
+   ('z', 26),
+   ('A', 27),
+   ('B', 28),
+   ('C', 29),
+   ('D', 30),
+   ('E', 31),
+   ('F', 32),
+   ('G', 33),
+   ('H', 34),
+   ('I', 35),
+   ('J', 35),
+   ('K', 37),
+   ('L', 38),
+   ('M', 39),
+   ('N', 40),
+   ('O', 41),
+   ('P', 42),
+   ('Q', 43),
+   ('R', 44),
+   ('S', 45),
+   ('T', 46),
+   ('U', 47),
+   ('V', 48),
+   ('W', 49),
+   ('X', 50),
+   ('Y', 51),
+   ('Z', 52)]
 
 
 -- divide text into a list of words
@@ -193,12 +255,13 @@ calc :: M.Map Char Integer -> String  -> Maybe [Integer]
 calc gMap str = (mapM (\c -> M.lookup c gMap) (map toUpper str))
 
 
--- calc Simple English, Pythagorean, Jewish, Pythagorean Exceptions
-calcSE,calcPY,calcHE,calcPX :: String -> Maybe [Integer]
+-- calculate Simple English, Pythagorean, Jewish, Pythagorean Exceptions, Bacon
+calcSE,calcPY,calcHE,calcPX,calcBC :: String -> Maybe [Integer]
 calcSE str = calc seMap str
 calcPY str = calc pyMap str
 calcHE str = calc heMap str
 calcPX str = calc pxMap str
+calcBC str = mapM (\c -> M.lookup c bcMap) str
 
 -- > calcSE "balloon"
 --   Just [2,1,12,12,15,15,14]
@@ -207,12 +270,13 @@ calcPX str = calc pxMap str
 -- > calcHE "balloon"
 --   Just [2,1,20,20,50,50,40]
 
--- calc the sum of Simple English, Pythagorean, Jewish
-sumSE,sumPY,sumHE,sumPX  :: String -> Integer
+-- calculate the sum of Simple English, Pythagorean, Jewish, Bacon
+sumSE,sumPY,sumHE,sumPX,sumBC  :: String -> Integer
 sumSE str = sumM (calcSE str)
 sumPY str = sumM (calcPY str)
 sumHE str = sumM (calcHE str)
 sumPX str = sumM (calcPX str)
+sumBC str = sumM (calcBC str)
 
 -- calculate the geometria of a list of words
 calcGem :: [String] -> [(String, Integer, Integer, Integer)]
@@ -225,6 +289,10 @@ calcGem xs = map (\s -> (s, sumSE s, sumPY s, sumHE s)) xs
 calcPythagorean :: [String] -> [(String, Integer, Integer)]
 calcPythagorean xs = map (\s -> (s, sumPY s, sumPX s)) xs
 
+-- calculate the Bacon of a list of words
+calcBacon :: [String] -> [(String, Integer)]
+calcBacon xs = map (\s -> (s, sumBC s)) xs
+
 
 -- given some text find the SE gematria
 findGematria :: String -> [(String, Integer, Integer, Integer)]
@@ -236,6 +304,10 @@ findGematria txt = calcGem (getWords txt)
 -- given some text find the Pythogorean gematria
 findPythagorean :: String -> [(String, Integer, Integer)]
 findPythagorean txt = calcPythagorean (getWords txt)
+
+-- given a String of text find the Bacon gematria
+findBacon :: String -> [(String, Integer)]
+findBacon txt = calcBacon (getWords txt)
 
 
 -- Nicely fomated report
