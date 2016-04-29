@@ -76,7 +76,7 @@ enMap = M.fromList
    ('Y', 150),
    ('Z', 156)]
 
--- Pythagorean
+-- Simple Pythagorean
 pyMap :: M.Map Char Integer
 pyMap = M.fromList
   [(' ', 0),
@@ -111,7 +111,43 @@ pyMap = M.fromList
    ('Y', 7),  -- 2+5
    ('Z', 8)]  -- 2+6
 
--- Pythagorean Exceptions
+-- Pythagorean S Exception
+psMap :: M.Map Char Integer
+psMap = M.fromList
+  [(' ', 0),
+   ('-', 0),
+   ('.', 0),
+   ('!', 0),
+   ('?', 0),
+   ('A', 1),
+   ('B', 2),
+   ('C', 3),
+   ('D', 4),
+   ('E', 5),
+   ('F', 6),
+   ('G', 7),
+   ('H', 8),
+   ('I', 9),
+   ('J', 1),  -- 1+0
+   ('K', 2),  -- 2/11 - 1+1 = 2
+   ('L', 3),  -- 1+2
+   ('M', 4),  -- 1+3
+   ('N', 5),
+   ('O', 6),
+   ('P', 7),
+   ('Q', 8),
+   ('R', 9),  -- 1+8 = 9
+   ('S', 10), -- 1/10 - 1+9 = 10 = 1+0 = 1
+   ('T', 2),  -- 2+0
+   ('U', 3),  -- 2+1
+   ('V', 4),  -- 4/22 - 2+2 = 4
+   ('W', 5),  -- 2+3
+   ('X', 6),  -- 2+4
+   ('Y', 7),  -- 2+5
+   ('Z', 8)]  -- 2+6
+
+
+-- Pythagorean All Exceptions
 pxMap :: M.Map Char Integer
 pxMap = M.fromList
   [(' ', 0),
@@ -255,11 +291,14 @@ calc :: M.Map Char Integer -> String  -> Maybe [Integer]
 calc gMap str = (mapM (\c -> M.lookup c gMap) (map toUpper str))
 
 
--- calculate Simple English, Pythagorean, Jewish, Pythagorean Exceptions, Bacon
-calcSE,calcPY,calcHE,calcPX,calcBC :: String -> Maybe [Integer]
+-- calculate Simple English, Pythagorean, Jewish, Pythagorian S,
+-- Pythagorean Exceptions, Bacon
+calcSE,calcPY,calcHE,calcPS,calcPX,calcBC
+  :: String -> Maybe [Integer]
 calcSE str = calc seMap str
 calcPY str = calc pyMap str
 calcHE str = calc heMap str
+calcPS str = calc psMap str
 calcPX str = calc pxMap str
 calcBC str = mapM (\c -> M.lookup c bcMap) str
 
@@ -270,11 +309,13 @@ calcBC str = mapM (\c -> M.lookup c bcMap) str
 -- > calcHE "balloon"
 --   Just [2,1,20,20,50,50,40]
 
--- calculate the sum of Simple English, Pythagorean, Jewish, Bacon
-sumSE,sumPY,sumHE,sumPX,sumBC  :: String -> Integer
+-- calculate the sum of Simple English, Simple Pythagorean, S Pythagorean,
+-- Pathagorean with Exceptions, Jewish, Bacon
+sumSE,sumPY,sumHE,sumPS,sumPX,sumBC  :: String -> Integer
 sumSE str = sumM (calcSE str)
 sumPY str = sumM (calcPY str)
 sumHE str = sumM (calcHE str)
+sumPS str = sumM (calcPS str)
 sumPX str = sumM (calcPX str)
 sumBC str = sumM (calcBC str)
 
@@ -286,8 +327,8 @@ calcGem xs = map (\s -> (s, sumSE s, sumPY s, sumHE s)) xs
 -- [("lets",56,11,215),("go",22,13,57),("on",29,11,90),("a",1,1,1),("balloon",71,26,183),("ride",36,27,98)]
 
 -- calculate the Pythagorean of a list of words
-calcPythagorean :: [String] -> [(String, Integer, Integer)]
-calcPythagorean xs = map (\s -> (s, sumPY s, sumPX s)) xs
+calcPythagorean :: [String] -> [(String, Integer, Integer, Integer)]
+calcPythagorean xs = map (\s -> (s, sumPY s, sumPS s, sumPX s)) xs
 
 -- calculate the Bacon of a list of words
 calcBacon :: [String] -> [(String, Integer)]
@@ -302,7 +343,7 @@ findGematria txt = calcGem (getWords txt)
 --   [("lets",56,11,215),("go",22,13,57),("on",29,11,90),("a",1,1,1),("balloon",71,26,183),("ride",36,27,98)]
 
 -- given some text find the Pythogorean gematria
-findPythagorean :: String -> [(String, Integer, Integer)]
+findPythagorean :: String -> [(String, Integer, Integer,Integer)]
 findPythagorean txt = calcPythagorean (getWords txt)
 
 -- given a String of text find the Bacon gematria
@@ -322,6 +363,8 @@ printGemLines txt = mapM_ printEach (findGematria txt)
 printGemTotal :: String -> IO ()
 printGemTotal txt = printEach (txt, sumSE txt, sumPY txt, sumHE txt)
 
+printPythagorian :: String -> IO ()
+printPythagorian txt = printEach (txt, sumPY txt, sumPS txt, sumPX txt)
 
 printEach :: (String, Integer, Integer, Integer) -> IO ()
 printEach (wrd,se,py,he) =
