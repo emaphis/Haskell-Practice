@@ -403,7 +403,7 @@ printPyTotal txt = do
 
 -- print and show work given a calc funtion and a String
 printSW :: (String -> [Int]) -> String -> IO()
-printSW fn str = putStrLn  (showWList lst ++ " = " ++ show (sum lst))
+printSW fn str = putStrLn  (str ++ " - " ++ showWList lst ++ " = " ++ show (sum lst))
   where lst = fn str
 
 -- print and show work of various gematria
@@ -414,6 +414,19 @@ printPSsw = printSW calcPS
 printPXsw = printSW calcPX
 printHEsw = printSW calcHE
 
+-- print gematria and show work
+printGemTotSW :: String -> IO ()
+printGemTotSW str = do
+  printSEsw str
+  printPYsw str
+  printHEsw str
+
+-- print Pythagorean Totals and show work
+printPyTotSW :: String -> IO ()
+printPyTotSW str = do
+  printPYsw str
+  printPSsw str
+  printPXsw str
 
 printEach3 :: (String, Int, Int, Int) -> IO ()
 printEach3 (wrd,se,py,he) =
