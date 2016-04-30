@@ -7,9 +7,9 @@ import qualified Data.Map as M
 import Data.Char
 
 
--- A table relating Char to Integer
+-- A table relating Char to Int
 -- usefull for cipher calculations
-type GemMap = M.Map Char Integer
+type GemMap = M.Map Char Int
 
 
 -- Simple English
@@ -292,7 +292,7 @@ getWords txt = splitOn " " txt
 -- ["lets","go","on","a","balloon","ride"]
 
 -- calc gematria given a word and a table
-calc :: GemMap -> String -> [Integer]
+calc :: GemMap -> String -> [Int]
 calc gMap str =
   strip (mapM (\c -> M.lookup c gMap) (map toUpper str))
 
@@ -313,7 +313,7 @@ strip bb =
 -- calculate Simple English, Pythagorean, Jewish, Pythagorean S,
 -- Pythagorean Exceptions, Bacon
 calcSE,calcPY,calcHE,calcPS,calcPX,calcBC
-  :: String -> [Integer]
+  :: String -> [Int]
 calcSE = calc seMap
 calcPY = calc pyMap
 calcHE = calc heMap
@@ -330,7 +330,7 @@ calcBC str = strip (mapM (\c -> M.lookup c bcMap) str)
 
 -- calculate the sum of Simple English, Simple Pythagorean, S Pythagorean,
 -- Pathagorean with Exceptions, Jewish, Bacon
-sumSE,sumPY,sumHE,sumPS,sumPX,sumBC :: String -> Integer
+sumSE,sumPY,sumHE,sumPS,sumPX,sumBC :: String -> Int
 sumSE = sum . calcSE
 sumPY = sum . calcPY
 sumHE = sum . calcHE
@@ -344,37 +344,37 @@ sumBC = sum . calcBC
 -- 26
 
 -- calculate the Simple English, Pythagorean, Jewish geometria of a list of words
-calcGem :: [String] -> [(String, Integer, Integer, Integer)]
+calcGem :: [String] -> [(String, Int, Int, Int)]
 calcGem = map (\s -> (s, sumSE s, sumPY s, sumHE s))
 
 -- > calcGem ["lets","go","on","a", "balloon", "ride"]
 -- [("lets",56,11,215),("go",22,13,57),("on",29,11,90),("a",1,1,1),("balloon",71,26,183),("ride",36,27,98)]
 
 -- calculate the Pythagorean of a list of words
-calcPy :: [String] -> [(String, Integer, Integer, Integer)]
+calcPy :: [String] -> [(String, Int, Int, Int)]
 calcPy = map (\s -> (s, sumPY s, sumPS s, sumPX s))
 
 -- calcPy ["lets","go","on","a", "balloon", "ride"]
 -- ("lets",11,20,20),("go",13,13,13),("on",11,11,11),("a",1,1,1),("balloon",26,26,26),("ride",27,27,27)]
 
 -- calculate the Bacon of a list of words
-calcBacon :: [String] -> [(String, Integer)]
+calcBacon :: [String] -> [(String, Int)]
 calcBacon = map (\s -> (s, sumBC s))
 
 
 -- find the Simple English, Pythagorean, Jewish gematria of a given text
-findGem :: String -> [(String, Integer, Integer, Integer)]
+findGem :: String -> [(String, Int, Int, Int)]
 findGem txt = calcGem (getWords txt)
 
 -- > findGem "lets go on a balloon ride"
 --   [("lets",56,11,215),("go",22,13,57),("on",29,11,90),("a",1,1,1),("balloon",71,26,183),("ride",36,27,98)]
 
 -- find the Simple and Exceptional Pythogorean gematria of a given text
-findPy :: String -> [(String, Integer, Integer,Integer)]
+findPy :: String -> [(String, Int, Int, Int)]
 findPy txt = calcPy (getWords txt)
 
 -- given a String of text find the Bacon gematria
-findBacon :: String -> [(String, Integer)]
+findBacon :: String -> [(String, Int)]
 findBacon txt = calcBacon (getWords txt)
 
 
@@ -402,20 +402,20 @@ printPyTotal txt = do
   printPy txt
 
 -- print and show work given a calc funtion and a String
-printSW :: (String -> [Integer]) -> String -> IO()
+printSW :: (String -> [Int]) -> String -> IO()
 printSW fn str = putStrLn  (showWList lst ++ " = " ++ show (sum lst))
   where lst = fn str
 
 -- print and show work of various gematria
-printSE,printPY,printPS,printPX,printHE :: String -> IO ()
-printSE = printSW calcSE
-printPY = printSW calcPY
-printPS = printSW calcPS
-printPX = printSW calcPX
-printHE = printSW calcHE
+printSEsw,printPYsw,printPSsw,printPXsw,printHEsw :: String -> IO ()
+printSEsw = printSW calcSE
+printPYsw = printSW calcPY
+printPSsw = printSW calcPS
+printPXsw = printSW calcPX
+printHEsw = printSW calcHE
 
 
-printEach3 :: (String, Integer, Integer, Integer) -> IO ()
+printEach3 :: (String, Int, Int, Int) -> IO ()
 printEach3 (wrd,se,py,he) =
   putStrLn (wrd ++ " --- " ++ show se ++ " / " ++  show py ++ " / " ++ show he)
 
@@ -427,7 +427,7 @@ showWList []      = ""
 
 
 -- filtring example
-fex :: [(String, Integer)]
+fex :: [(String, Int)]
 fex = [("lets",56),("go",22),("on",29),("a",1),("balloon",71),("ride",36)]
 
 -- how to filter on second element of a pair
@@ -436,7 +436,7 @@ fex = [("lets",56),("go",22),("on",29),("a",1),("balloon",71),("ride",36)]
 
 
 -- filter a list of pairs based on the second Iteger component.
-filterList :: (Integer -> Bool) -> [(String, Integer)] -> [(String, Integer)]
+filterList :: (Int -> Bool) -> [(String, Int)] -> [(String, Int)]
 filterList prd lst = filter (\p -> prd (snd p)) lst
 
 
