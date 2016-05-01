@@ -19,18 +19,23 @@ library
                      , Math
                      , Fib
                      , Misc.Stuff
-  build-depends:       QuickCheck >= 2.8.1
+                     , FindIdentifier
+  build-depends:       HUnit >= 1.3.1.1
+                     , QuickCheck >= 2.8.1
                      , base >= 4.7 && < 5
                      , hspec >= 2.2.3
+                     , syb >= 0.6
   default-language:    Haskell2010
 
 executable testing-project-exe
   hs-source-dirs:      app
   main-is:             Main.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       QuickCheck >= 2.8.1
+  build-depends:       HUnit >= 1.3.1.1
+                     , QuickCheck >= 2.8.1
                      , base
                      , hspec >= 2.2.3
+                     , syb >= 0.6
                      , testing-project
   default-language:    Haskell2010
 
@@ -38,11 +43,13 @@ test-suite testing-project-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  build-depends:       QuickCheck
+  build-depends:       HUnit >= 1.3.1.1
+                     , QuickCheck
                      , QuickCheck >= 2.8.1
                      , base
                      , hspec >= 2.2.3
                      , hspec-core
+                     , syb >= 0.6
                      , testing-project
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010

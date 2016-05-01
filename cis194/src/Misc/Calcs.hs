@@ -430,7 +430,7 @@ printPyTotSW str = do
 
 printEach3 :: (String, Int, Int, Int) -> IO ()
 printEach3 (wrd,se,py,he) =
-  putStrLn (wrd ++ " --- " ++ show se ++ " / " ++  show py ++ " / " ++ show he)
+  putStrLn (wrd ++ " -- " ++ show se ++ "/" ++  show py ++ "/" ++ show he)
 
 -- show the work list
 showWList :: Show a => [a] -> String
