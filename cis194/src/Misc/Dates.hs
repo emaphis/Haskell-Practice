@@ -17,11 +17,31 @@ import Data.Time.Clock.POSIX
 -- fromGregorianValid :: Integer -> Int -> Int -> Maybe
 -- fromGregorian year month day -> Day
 
+d1 :: Maybe Day
+d1  = fromGregorianValid 2008 10 22
+--- Just 2008-10-22
+
 -- convert a day back to a triple
 -- toGregorian :: Day -> (Intger, Int, Int)
 
+--dd =  case val d of
+--        Nothing  -> (0,0,0)
+--        Just d   -> d
+--                    where  val = toGregorian d1
+
+sd2 :: String
+sd2  = show d1
+-- "Just 2008-10-22"
+
+
 -- add or subtract number of days to a Day
 -- addDays :: Integer -> Day -> Day
+
+today,oneWeek :: Day
+today = fromGregorian 2015 8 30
+
+oneWeek = addDays 7 today
+-- 2015-09-06
 
 -- difference between two days
 -- diffDays diffDays :: Day -> Day -> Integer
