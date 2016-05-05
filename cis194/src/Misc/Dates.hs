@@ -24,10 +24,14 @@ d1  = fromGregorianValid 2008 10 22
 -- convert a day back to a triple
 -- toGregorian :: Day -> (Intger, Int, Int)
 
---dd =  case val d of
---        Nothing  -> (0,0,0)
---        Just d   -> d
---                    where  val = toGregorian d1
+conv :: Maybe Day -> (Integer, Int, Int)
+conv dy =  case dy of
+        Nothing  -> (0,0,0)
+        Just d   -> toGregorian d
+
+d2 :: (Integer, Int, Int)
+d2 = conv d1
+-- (2008,10,22)
 
 sd2 :: String
 sd2  = show d1
@@ -43,25 +47,73 @@ today = fromGregorian 2015 8 30
 oneWeek = addDays 7 today
 -- 2015-09-06
 
+
 -- difference between two days
 -- diffDays diffDays :: Day -> Day -> Integer
+
+someDay :: Day
+someDay  = fromGregorian 2015 9 30
+
+nd2 :: Integer
+nd2  = diffDays someDay today
+-- 31
 
 -- adding or subracting months adusting
 -- addGregorianMonthsClip :: Integer -> Day -> Day
 
+clientRegestered :: Day
+clientRegestered  = fromGregorian 2015 5 31
+
+billD1 :: Day
+billD1  = addGregorianMonthsClip  1 clientRegestered
+-- 2015-06-30
+
+mp :: [Day]
+mp  = map (\n -> addGregorianMonthsClip n clientRegestered) [1..12]
+-- [2015-06-30,2015-07-31,
+--  2015-08-31,2015-09-30,
+--  2015-10-31,2015-11-30,
+--  2015-12-31,2016-01-31,
+--  2016-02-29,2016-03-31,
+--  2016-04-30,2016-05-31]
+
+
 ----------------------------
 -- Universal time ----------
+
+tm1,tm2,tm3 :: UTCTime
+tm1  = UTCTime today 0
+-- 2015-08-30 00:00:00 UTC
+
+tm2  = UTCTime today (12*60*60 + 34*60 + 56)
+-- 2015-08-30 12:34:56 UTC
+
+tm3  = UTCTime today (calcSeconds 12 34 56)
+-- 2015-08-30 12:34:56 UTC
 
 -- UTCTime  a type
 -- NominalDiffTime - number of seconds as a type
 
 -- getCurrentTime :: IO UTCTime
 
+now2, latter :: IO UTCTime
+now2 = getCurrentTime
+-- 2016-05-05 04:28:38.154 UTC  -- or whatever, not a function
+
+----------------------------
+-- Computation -------------
+
 -- compute new times based on num of seconds
 -- addUTCTime :: NominalDiffTime -> UTCTime -> UTCTime
 
 -- number of seconds between two times
 -- diffUTCTime :: UTCTime -> UTCTime -> NominalDiffTime
+
+
+latter = getCurrentTime
+
+--diff4 :: NominalDiffTime
+--diff4  = diffUTCTime latter now  -- wrong type IO
 
 -- converts any number to a NominalDiffTime
 -- realToFrac :: (Fractional b, Real a) => a -> b
@@ -180,8 +232,9 @@ str  = formatTime defaultTimeLocale "%c" time2
 -- some utility functions
 
 -- | Calculate the number of seconds given Hrs, Mns, Scs
-calcSeconds :: Int -> Int -> Int -> Int
-calcSeconds hrs mns scs = (hrs*60*60) + (mns*60) + scs
+calcSeconds ::  DiffTime -> DiffTime ->
+                DiffTime -> DiffTime
+calcSeconds hrs mns scs =   ((hrs*60*60) + (mns*60) + scs)
 
 -- | Calculate the days from beginning of year to now
 --   and days until end of year
