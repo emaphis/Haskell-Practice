@@ -6,6 +6,7 @@ module Misc.Dates2 where
 import Data.Time
 import Data.Time.Clock.POSIX
 
+
 ------------------------------------------
 -- In the beginning there was seconds
 -- seconds are the basis of time keeping
@@ -27,6 +28,8 @@ dTime4 = picosecondsToDiffTime 2253000000000 -- 2253 milliseconds
 -- 10s
 -- 2.253s
 
+
+
 ---------------------------------------------------
 -- Seconds to time
 -- number of seconds since 1st of january 1970
@@ -43,6 +46,7 @@ utcTime1 = posixSecondsToUTCTime $ fromIntegral 10
 -- 1970-01-01 00:00:10 UTC
 
 -- utcTimeToPOSIXSeconds
+
 
 
 ------------------------------------------------------
@@ -92,14 +96,20 @@ utcTime4 = parseTimeM True defaultTimeLocale "%c" "Thu Jan 1 00:00:10 UTC 1970" 
 -- Just 1970-01-01 00:00:10 UTC
 
 
+
 ----------------------------------------------------
 -- Organizing time
 -- Data.Time.Calendar
+
+mday1 :: Maybe Day
+mday1 = fromGregorianValid 2015 10 22
+-- Just 2015-10-22Just 2015-10-22
 
 day1 :: Day
 day1 = fromGregorian 1970 1 1
 -- 1970-01-01
 
+-- destructuring
 year :: Integer
 month, dayOfMonth :: Int
 (year, month, dayOfMonth) = toGregorian day1
@@ -119,6 +129,23 @@ day2 = utctDay utcTime5
 diffTime2 :: DiffTime
 diffTime2 = utctDayTime utcTime5
 -- 43200s
+
+-- calculation
+
+-- add days
+day3 :: Day
+day3 = addDays 10 day2
+-- 2011-12-26
+
+-- difference between two days
+int1 :: Integer
+int1 = diffDays day3 day2
+-- 10
+
+-- add months
+day4 :: Day
+day4 = addGregorianMonthsClip 1 day3
+-- 2012-01-26
 
 
 ----------------------------------------
