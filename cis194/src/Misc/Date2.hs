@@ -1,5 +1,6 @@
 -- | More date practice
 --   <http://tab.snarc.org/posts/haskell/2011-12-16-date-in-haskell.html>
+--   Good info here: <https://wiki.haskell.org/Time>
 
 module Misc.Dates2 where
 
